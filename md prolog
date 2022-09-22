@@ -1,0 +1,66 @@
+go:-
+hypothesis(Disease),
+write('I believe that the patient have'),
+write(Disease),
+nl,
+write('TAKE CARE '),
+undo.
+
+hypothesis(flu)      :- flu, !.
+hypothesis(jaundice)  :- jaundice, !.
+hypothesis(unknown). /* no diagnosis*/
+
+
+flu :-
+verify(fatigue),
+verify(vomiting),
+verify(fever),
+write('Advices and Sugestions:'),
+nl,
+write('1: drink juice'),
+nl,
+write('2: drink salt water'),
+nl,
+write('3: apply pain killer'),
+nl,
+write('put hot water cloth on head because'),
+nl.
+
+jaundice :-
+verify(yellowisheyesandskin),
+verify(darkcoloururine),
+verify(palebowlmovement),
+write('Advices and Sugestions:'),
+nl,
+write('1: drink hot water'),
+nl,
+write('2: put eye drops'),
+nl,
+write('3: excercise regularly'),
+nl,
+write('Please drink lot of water Because'),
+nl.
+
+ask(Question) :-
+write('symptom:'),
+write(Question),
+read(Response),
+nl,
+( (Response == yes ; Response == y)
+->
+assert(yes(Question)) ;
+assert(no(Question)), fail) .
+  :- dynamic(yes/1,no/1).
+
+verify(S) :-
+ (yes(S)
+  ->
+   true ;
+ (no(S)
+  ->
+   fail ;
+ ask(S))).
+
+undo :- retract(yes(_)),fail.
+undo :- retract(no(_)),fail.
+undo.
